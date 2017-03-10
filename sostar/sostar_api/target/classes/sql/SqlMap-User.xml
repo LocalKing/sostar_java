@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.UserDao">
+    <select id="getUserAccount" parameterType="String" resultType="com.sostar.bean.UserAccountInfo">
+        SELECT
+        a.PASSWORD AS password,
+        a.PHONE AS phone,
+        a.USER_ID AS userId,
+        b.USER_TYPE AS userType
+        from
+        USER_ACCOUNT a,USER b
+        where
+        a.PHONE=#{phone}
+        and a.USER_ID =b.USER_ID
+    </select>
+    <select id="checkPhone" parameterType="String" resultType="int">
+        SELECT COUNT(1)
+        from USER_ACCOUNT where phone=#{phone}
+    </select>
+    <insert id="registerUserAccount" parameterType="com.sostar.bean.entity.UserAccountEntity" keyProperty="phoneId" useGeneratedKeys="true">
+        INSERT INTO USER_ACCOUNT
+        (
+        PASSWORD,
+        PHONE,
+        USER_ID,
+        CRT_TIME
+        )
+        VALUE
+        (
+        #{password},
+        #{phone},
+        #{userId},
+        NOW()
+        )
+    </insert>
+    <insert id="registerUser"   parameterType="com.sostar.bean.entity.UserEntity" keyProperty="userId" useGeneratedKeys="true" >
+        INSERT INTO USER
+        (
+        USER_TYPE,
+        CRT_TIME,
+        MSG_FLG,
+        PHONE_ID,
+         DEVICES_ID,
+        PLATFORM ,
+        SYSVERSION
+        )
+        VALUE
+        (
+        #{userType},
+        #{crtTime},
+        #{msgFlg},
+        #{phoneId},
+        #{deviceId},
+        #{platform},
+        #{sysversion}
+        )
+    </insert>
+    <update id="userResetPass" parameterType="com.sostar.bean.param.PasswordResetParam">
+        UPDATE USER_ACCOUNT
+        SET
+        PASSWORD =#{password}
+        WHERE
+        PHONE =#{phone}
+    </update>
+    <update id="setUserType" parameterType="com.sostar.bean.param.UserTypeParam">
+        UPDATE USER
+        SET
+        USER_TYPE =#{userType}
+        WHERE
+        USER_ID =#{userId}
+    </update>
+
+    <insert id="setStaffInfo" parameterType="com.sostar.bean.param.UserTypeParam">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from STAFF where USER_ID = #{userId}
+        </selectKey>
+        <if test="count > 0">
+            update STAFF
+            set PHONE = #{phone}
+            where USER_ID = #{userId}
+        </if>
+        <if test="count==0">
+            INSERT INTO STAFF
+            (
+            PHONE,
+            USER_ID
+            )
+            VALUE
+            (
+            #{phone},
+            #{userId}
+            )
+        </if>
+    </insert>
+    <insert id="setComapnyInfo" parameterType="com.sostar.bean.param.UserTypeParam">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from COMPANY where USER_ID = #{userId}
+        </selectKey>
+        <if test="count > 0">
+            update COMPANY
+            set PHONE = #{phone}
+            where USER_ID = #{userId}
+        </if>
+        <if test="count==0">
+            INSERT INTO COMPANY
+            (
+            PHONE,
+            USER_ID
+            )
+            VALUE
+            (
+            #{phone},
+            #{userId}
+            )
+        </if>
+    </insert>
+
+    <update id="updateDeviceid" parameterType="String">
+        UPDATE USER
+        SET
+        DEVICES_ID =#{0}
+        WHERE
+        PHONE =#{1}
+    </update>
+    <update id="updatePhoneid" parameterType="String">
+        UPDATE USER
+        SET
+        PHONE_ID =#{0}
+        WHERE
+        USER_ID =#{1}
+    </update>
+    <update id="updateCommParam" parameterType="com.sostar.bean.common.Request">
+        UPDATE USER
+        SET
+        DEVICES_ID =#{deviceId},
+        PLATFORM =#{platform},
+        SYSVERSION =#{sysversion}
+        WHERE
+        USER_ID =#{userId}
+    </update>
+
+</mapper>

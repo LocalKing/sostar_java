@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.SuggestDao">
+    <insert id="setSuggest" parameterType="com.sostar.bean.param.SuggestParam">
+        INSERT INTO SUGGESTION
+        (
+        USER_ID,
+        CRT_TIME,
+        MESSAGE,
+        READ_FLG
+        )
+        VALUE
+        (
+        #{userId},
+        NOW(),
+        #{suggest},
+        "0"
+        )
+    </insert>
+</mapper>

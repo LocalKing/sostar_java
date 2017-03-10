@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.EmployerDao">
+    <select id="searchEmployer" parameterType="String" resultType="com.sostar.bean.result.EmployerInfoResult">
+        SELECT
+        USER_ID AS userId,
+        LOGO_PATH AS logoPath,
+        AUTHENTICATION AS authentication,
+        CLOSE_RATE AS closeRate,
+        COMPANY_NAME AS companyName,
+        CONTACT_PHONE AS contactPhone,
+        INTRODUCTION AS introduction,
+        ADDRESS AS address,
+        COMPANY_CODE AS companyCode,
+        LIC_PATH AS licPath,
+        RIF_PATH AS rifPath,
+        LONGITUDE AS longitude,
+        LATITUDE AS latitude
+        from
+        COMPANY
+        where AUTHENTICATION="2"
+    </select>
+    <select id="searchStaffOnline" parameterType="String" resultType="com.sostar.bean.result.StaffInfoResult">
+        SELECT
+        STAFF_ID AS staffId,
+        USER_ID AS userId,
+        NAME AS name,
+        PHONE AS phone,
+        SEX AS sex,
+        AGE AS age,
+        STAR AS star,
+        INTRODUCTION AS introduction,
+        AUTHENTICATION AS authentication,
+        CLOSE_RATE AS closeRate,
+        PIC_PATH AS picPath,
+        LONGITUDE AS longitude,
+        LATITUDE AS latitude
+        from
+        STAFF
+        where AUTHENTICATION="1"
+    </select>
+</mapper>

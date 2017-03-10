@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.AllMsgDao">
+    <select id="getMsgList" parameterType="int" resultType="com.sostar.bean.result.AllMsgResult">
+        SELECT
+        MESSAGE_ID AS messageId,
+        CRT_TIME AS crtTime,
+        UP_TIME AS upTime,
+        MESSAGE AS message,
+        READ_FLG AS readFlg,
+        RECEIVER_IDS AS receiverIds,
+        MSG_TYPE AS msgType,
+        DEL_FLG AS delFlg
+        from
+        MESSAGE
+        where DEL_FLG="0" and RECEIVER_IDS = #{userId}
+    </select>
+
+    <update id="deleteMsgList" parameterType="int">
+        UPDATE MESSAGE
+        SET
+        DEL_FLG='1'
+        WHERE
+        RECEIVER_IDS =#{userId}
+    </update>
+
+    <update id="deleteMsg" parameterType="int">
+        UPDATE MESSAGE
+        SET
+        DEL_FLG='1'
+        WHERE
+        MESSAGE_ID =#{messageId}
+    </update>
+
+    <update id="readMsgList" parameterType="int">
+        UPDATE MESSAGE
+        SET
+        READ_FLG='1'
+        WHERE
+        MESSAGE_ID =#{messageId}
+    </update>
+
+    <insert id="setEmployerMsg" parameterType="com.sostar.bean.param.EmployerSetMsgParam">
+        INSERT INTO MESSAGE
+        (
+        USER_ID,
+        ORDER_ID,
+        CRT_TIME,
+        MESSAGE,
+        RECEIVER_IDS,
+        READ_FLG,
+        DEL_FLG,
+        MSG_TYPE
+        )
+        VALUE
+        (
+        #{userId},
+        #{orderId},
+        NOW(),
+        #{msg},
+        #{receiverId},
+        "0",
+        "0",
+        "1"
+        )
+    </insert>
+    <select id="getStaffAlias" parameterType="String" resultType="com.sostar.bean.result.MsgStaffAliasResult">
+        SELECT
+        USER.USER_ID AS userId,
+        USER.PLATFORM AS platForm
+        from
+        ORDER_RELATION,USER
+        where ORDER_RELATION.ORDER_ID = #{orderId}
+        and ORDER_RELATION.STAFF_USER_ID = USER.USER_ID
+        and USER.USER_TYPE = "0"
+        and USER.MSG_FLG = "1"
+    </select>
+    <insert id="setSysMsg" parameterType="com.sostar.bean.param.SetSysMsgParam">
+        INSERT INTO MESSAGE
+        (
+        USER_ID,
+        CRT_TIME,
+        MESSAGE,
+        RECEIVER_IDS,
+        READ_FLG,
+        DEL_FLG,
+        MSG_TYPE
+        )
+        VALUE
+        (
+        #{userId},
+        NOW(),
+        #{msg},
+        #{receiverId},
+        "0",
+        "0",
+        "2"
+        )
+    </insert>
+    <select id="getAllStaffAlias" resultType="com.sostar.bean.result.MsgStaffAliasResult">
+        SELECT
+        USER_ID AS userId,
+        PLATFORM AS platForm
+        from
+        USER
+        where
+        USER.MSG_FLG = "1"
+    </select>
+
+</mapper>

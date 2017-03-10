@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.SystemDao">
+    <update id="restStaffRange" parameterType="com.sostar.bean.param.SystemParam" >
+        UPDATE STAFF
+        SET
+        RANGE_AREA =#{rangeArea}
+        WHERE
+        USER_ID =#{userId}
+    </update>
+    <update id="restEmployerRange" parameterType="com.sostar.bean.param.SystemParam" >
+        UPDATE COMPANY
+        SET
+        RANGE_AREA =#{rangeArea}
+        WHERE
+        USER_ID =#{userId}
+    </update>
+    <select id="searchEmployerSystem" parameterType="com.sostar.bean.param.SystemSearchParam" resultType="com.sostar.bean.result.SystemSearchResult">
+        SELECT
+        a.USER_ID AS userId,
+        a.USER_TYPE AS userType,
+        a.PHONE AS phone,
+        b.RANGE_AREA AS rangeArea
+        FROM USER a,COMPANY b
+        WHERE
+        a.USER_ID = #{userId}
+        AND
+        a.USER_ID = b.USER_ID
+    </select>
+    <select id="searchStaffSystem" parameterType="com.sostar.bean.param.SystemSearchParam" resultType="com.sostar.bean.result.SystemSearchResult">
+        SELECT
+        a.USER_ID AS userId,
+        a.USER_TYPE AS userType,
+        a.PHONE AS phone,
+        b.RANGE_AREA AS rangeArea
+        FROM USER a,STAFF b
+        WHERE
+        a.USER_ID = #{userId}
+        AND
+        a.USER_ID = b.USER_ID
+    </select>
+    <update id="resetSys" parameterType="com.sostar.bean.param.SystemParam" >
+        UPDATE USER
+        SET
+        MSG_FLG =#{msgFlg}
+        WHERE
+        USER_ID =#{userId}
+    </update>
+    <select id="searchSystem" parameterType="com.sostar.bean.param.SystemSearchParam" resultType="com.sostar.bean.result.SystemSearchResult">
+        SELECT
+        USER_TYPE AS userType,
+        MSG_FLG AS msgFlg
+        FROM USER
+        WHERE
+        USER_ID = #{userId}
+    </select>
+    <select id="searchByUserType" parameterType = "com.sostar.bean.param.SysUserTypeSetParam" resultType="com.sostar.bean.result.SysUserTypeSet">
+
+       SELECT
+       USER_ID AS userId,
+       USER_TYPE AS userType,
+        PHONE_ID AS phoneId
+        FROM
+        USER
+        WHERE
+        USER_ID = #{userId}
+
+    </select>
+    <select id="getIsCreate" parameterType = "com.sostar.bean.param.SysUserTypeSetParam" resultType="com.sostar.bean.result.SysUserTypeSet">
+
+        SELECT
+        USER_ID AS userId,
+        USER_TYPE AS userType,
+        PHONE_ID AS phoneId
+        FROM
+        USER
+        WHERE
+        PHONE_ID = #{phoneId}
+        AND USER_TYPE =#{userType}
+
+    </select>
+    <update id="updateCurrentUserId" parameterType="String">
+        UPDATE USER_ACCOUNT
+        SET
+         USER_ID=#{1}
+        WHERE
+        PHONE_id =#{0}
+    </update>
+    </mapper>

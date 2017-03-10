@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.OrderStaffDao">
+    <select id="getUserDistance" parameterType="String" resultType="com.sostar.bean.entity.UserEntity">
+        SELECT
+       RANGE_AREA AS  rangeArea,
+       LONGITUDE AS longitude,
+       LATITUDE AS  latitude
+        from
+      USER
+        where
+       USER_ID =#{userId}
+    </select>
+    <select id="searchOrderStaff" resultType="com.sostar.bean.entity.OrderEntity"
+            parameterType="com.sostar.bean.entity.OrderStaffEntity">
+
+    SELECT
+    o.ORDER_ID AS orderId,
+    o.JOB_TYPE AS jobType,
+    o.START_TIME AS startTime,
+    o.END_TIME AS endTime,
+    o.PERIOD_TIME AS periodTime,
+    o.STAFF_ACCOUNT AS staffAccount,
+    o.UNIT_PRICE AS unitPrice,
+    o.PAYMENT_TYPE AS paymentType,
+    o.SEX AS sex,
+    o.DESCRIPTION AS description,
+    o.CONFIRM_FLG AS confirmFlg,
+    o.ADDRESS AS address,
+    o.USER_ID AS createUserId,
+    o.OK_STAFF_ACCOUNT AS okStaffAccount,
+    o.LONGITUDE AS longitude,
+    o.LATITUDE AS latitude,
+    o.PIC_LIST AS picList,
+    o.ORDER_STATUS AS orderStatus,
+    o.CRT_TIME AS crtTime,
+    co.LOGO_PATH AS logoPath,
+    co.COMPANY_NAME AS companyName
+    FROM SOSTAR_ORDER o,COMPANY co
+    WHERE o.ORDER_STATUS= #{orderStatus}
+    AND  o.LONGITUDE BETWEEN #{minLng} AND #{maxLng}
+    AND  o.LATITUDE BETWEEN #{minLat} AND #{maxLat}
+    AND  co.USER_ID = o.USER_ID
+    AND o.CRT_TIME 	&gt;= #{crtTime}
+</select>
+
+    <select id="getOrderByOrderId" parameterType="String" resultType="com.sostar.bean.entity.OrderEntity">
+        SELECT
+        STAFF_ACCOUNT AS staffAccount,
+        OK_STAFF_ACCOUNT AS okStaffAccount
+        FROM SOSTAR_ORDER
+        WHERE ORDER_ID=#{orderId}
+        AND DEL_FLG = '0'
+    </select>
+    <select id="getConfirmedOrderNumber" parameterType="String" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM ORDER_RELATION
+        WHERE ORDER_ID=#{0}
+        AND CONFIRM_FLG = #{1}
+    </select>
+    <update id="updateOrderStatus" parameterType="String">
+        UPDATE USER
+        SET
+        OK_STAFF_ACCOUNT =#{1},
+        STATUS =#{2}
+        WHERE
+        ORDER_ID =#{0}
+    </update>
+    <insert id="createOrderRelation"   parameterType="com.sostar.bean.entity.OrderRelationEntity" >
+        INSERT INTO ORDER_RELATION
+        (
+        ORDER_ID,
+        STAFF_USER_ID,
+        CONFIRM_FLG,
+        STATUS,
+        CRT_TIME
+        )
+        VALUE
+        (
+        #{orderId},
+        #{staffUserId},
+        #{confirmFlg},
+        #{status},
+        #{crtTime}
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.EmployDao">
+    <select id="searchEmploy" parameterType="com.sostar.bean.param.EmploySearchParam" resultType="com.sostar.bean.EmployInfo">
+        SELECT
+        EMPLOY_ID AS employId,
+        NAME AS name,
+        PHONE AS phone,
+        SEX AS sex,
+        AGE AS age,
+        INTRODUCTION AS introduction,
+        AUTHENTICATION AS authentication,
+        CLOSE_RATE AS closeRate
+        from employ
+    </select>
+</mapper>

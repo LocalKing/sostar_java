@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.EmployerMyOrderDao">
+    <select id="getEmployerMyOrderList" parameterType="com.sostar.bean.entity.EmployerOrderEntity"
+            resultType="com.sostar.bean.result.EmployerMyOrderResult">
+        SELECT
+        ORDER_ID AS orderId,
+        JOB_TYPE AS jobType,
+        START_TIME AS startTime,
+        END_TIME AS endTime,
+        PERIOD_TIME AS periodTime,
+        STAFF_ACCOUNT AS staffAccount,
+        UNIT_PRICE AS unitPrice,
+        PAYMENT_TYPE AS paymentType,
+        SEX AS sex,
+        DESCRIPTION AS descrebtion,
+        CONFIRM_FLG AS confirmFlg,
+        CRT_TIME AS orderStatus,
+        ADDRESS AS address,
+        LONGITUDE AS longitude,
+        LATITUDE AS latitude,
+        ORDER_RANGE AS orderRange
+        from
+        SOSTAR_ORDER
+        where DEL_FLG="0" and USER_ID=#{userId} and ORDER_STATUS=#{orderStatus}
+    </select>
+    <insert id="setEmployerOrder" parameterType="com.sostar.bean.entity.SetEmployerOrderEntity">
+        INSERT INTO SOSTAR_ORDER
+        (
+        USER_ID,
+        JOB_TYPE,
+        START_TIME,
+        END_TIME,
+        PERIOD_TIME,
+        STAFF_ACCOUNT,
+        UNIT_PRICE,
+        UNIT_PRICE_TYPE,
+        PAYMENT_TYPE,
+        SEX,
+        ADDRESS,
+        CONFIRM_FLG,
+        DESCRIPTION,
+        ORDER_RANGE,
+        LONGITUDE,
+        LATITUDE,
+        PIC_LIST,
+        LEAST_TIME,
+        LAGGEST_TIME,
+        CRT_TIME,
+        ORDER_STATUS,
+        OK_STAFF_ACCOUNT,
+        DEL_FLG
+        )
+        VALUE
+        (
+        #{userId},
+        #{jobType},
+        #{startTime},
+        #{endTime},
+        #{periodTime},
+        #{staffAccount},
+        #{unitPrice},
+        #{unitPriceType},
+        #{paymentType},
+        #{sex},
+        #{address},
+        #{confirmFlg},
+        #{description},
+        #{orderRange},
+        #{longitude},
+        #{latitude},
+        #{picList},
+        #{leastTime},
+        #{laggestTime},
+        NOW(),
+        #{orderStatus},
+        "0",
+        "0"
+        )
+    </insert>
+    <select id="getEmployerCashAvaiable" parameterType="int"
+            resultType="com.sostar.bean.result.EmployerCashAvaiableResult">
+        SELECT
+        CASH_AVAIABLE AS cashAvaiable
+        FROM
+        CASHPOOL
+        WHERE
+        USER_ID=#{userId}
+    </select>
+    <update id="setDraftToOrder" parameterType="int">
+        UPDATE SOSTAR_ORDER
+        SET
+        ORDER_STATUS='1'
+        WHERE
+        ORDER_ID =#{orderId}
+    </update>
+</mapper>

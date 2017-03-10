@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.StaffCenterDao">
+    <select id="getStaffCenter" parameterType="com.sostar.bean.param.StaffCenterParam"
+            resultType="com.sostar.bean.result.StaffCenterResult">
+        SELECT
+        NAME AS name,
+        NICK_NAME AS nickName,
+        PHONE AS phone,
+        SEX AS sex,
+        AGE AS age,
+        CLOSE_RATE AS closeRate,
+        PIC_PATH AS picPath,
+        AUTHENTICATION AS authentication,
+        FINSHED_ORDERS AS finishedOrders,
+        INTRODUCTION AS introduction,
+        RANGE_AREA AS rangeArea,
+        PIC_CER_OPPO AS picCerOppo,
+        PIC_CER_POS AS picCerpos,
+        CERTIFICATE_ID AS certificateId
+        from STAFF
+        WHERE
+        1=1
+        AND
+        USER_ID = #{userId}
+    </select>
+    <select id="getStaffDetail" parameterType="com.sostar.bean.param.StaffDetailParam"
+            resultType="com.sostar.bean.result.StaffDetailResult">
+        SELECT
+        STAFF_ID AS staffId,
+        NAME AS name,
+        PHONE AS phone,
+        SEX AS sex,
+        AGE AS age,
+        CLOSE_RATE AS closeRate,
+        PIC_PATH AS picPath,
+        AUTHENTICATION AS authentication,
+        INTRODUCTION AS introduction,
+        NICK_NAME AS nickName,
+        FINSHED_ORDERS AS finishedOrders
+
+        from STAFF
+        WHERE
+        1=1
+        AND
+        STAFF_ID = #{staffId}
+    </select>
+    <update id="setStaffAuthentica" parameterType="com.sostar.bean.param.StaffAuthParam">
+        UPDATE STAFF
+        SET
+        <if test="name !=null and name !=''">
+            NAME=#{name},
+        </if>
+        <if test="phone !=null and phone !=''">
+            PHONE=#{phone},
+        </if>
+        <if test="picPath !=null and picPath !=''">
+            PIC_PATH=#{picPath},
+        </if>
+        <if test="certificateId !=null and certificateId !=''">
+            CERTIFICATE_ID=#{certificateId},
+        </if>
+        <if test="introduction !=null and introduction !=''">
+            INTRODUCTION=#{introduction},
+        </if>
+        <if test="address !=null and address !=''">
+            ADDRESS=#{address},
+        </if>
+        <if test="picCerOppo !=null and picCerOppo !=''">
+            PIC_CER_OPPO=#{picCerOppo},
+        </if>
+        <if test="picCerpos !=null and picCerpos !=''">
+            PIC_CER_POS=#{picCerpos},
+        </if>
+        AUTHENTICATION="2"
+        WHERE
+        USER_ID =#{userId}
+    </update>
+
+    <update id="setStaffInfo" parameterType="com.sostar.bean.param.StaffInfoParam">
+        UPDATE STAFF
+        SET
+        <if test="nickName !=null and nickName !=''">
+            NICK_NAME=#{nickName},
+        </if>
+        <if test="sex !=null and sex !=''">
+            SEX=#{sex},
+        </if>
+        <if test="age !=null and age !=''">
+            AGE=#{age},
+        </if>
+        <if test="authentication !=null and authentication !=''">
+            AUTHENTICATION=#{authentication},
+        </if>
+        <if test="introduction !=null and introduction !=''">
+            INTRODUCTION=#{introduction},
+        </if>
+        <if test="picPath !=null and picPath !=''">
+            PIC_PATH=#{picPath},
+        </if>
+        <if test="rangeArea !=null and rangeArea !=''">
+            RANGE_AREA=#{rangeArea},
+        </if>
+        UPDATE_TIME = NOW()
+        WHERE
+        USER_ID =#{userId}
+    </update>
+</mapper>

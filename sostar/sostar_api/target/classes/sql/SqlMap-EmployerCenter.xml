@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sostar.dao.EmployerCenterDao">
+    <select id="getEmployerCenter" parameterType="com.sostar.bean.param.EmployerCenterParam"
+            resultType="com.sostar.bean.result.EmployerCenterResult">
+        SELECT
+        COMPANY_CODE AS companyCode,
+        LOGO_PATH AS logoPath,
+        CONTACT_PHONE AS contactPhone,
+        COMPANY_NAME AS companyName,
+        ONGOING_ORDER AS ongoingOrder,
+        CLOSE_RATE AS closeRate,
+        AUTHENTICATION AS authentication,
+        INTRODUCTION AS introduction,
+        RANGE_AREA AS rangeArea,
+        STAR AS star,
+        FINISHED_ORDER_NUM AS finishedOrderNum,
+        MESSAGE_NUM AS messageNum,
+        LIC_PATH AS licPath,
+        RIF_PATH AS rifPath,
+        CER_PATH AS cerPath,
+        WEB_ADDRESS AS webAddress
+        from COMPANY
+        WHERE
+        1=1
+        AND
+        USER_ID = #{userId}
+    </select>
+    <update id="setEmployerAuthentica" parameterType="com.sostar.bean.param.EmployerAuthParam">
+        UPDATE COMPANY
+        SET
+        <if test="logoPath !=null and logoPath !=''">
+            LOGO_PATH=#{logoPath},
+        </if>
+        <if test="companyName !=null and companyName !=''">
+            COMPANY_NAME=#{companyName},
+        </if>
+        <if test="contactPhone !=null and contactPhone !=''">
+            CONTACT_PHONE=#{contactPhone},
+        </if>
+        <if test="introduction !=null and introduction !=''">
+            INTRODUCTION=#{introduction},
+        </if>
+        <if test="address !=null and address !=''">
+            ADDRESS=#{address},
+        </if>
+        <if test="companyCode !=null and companyCode !=''">
+            COMPANY_CODE=#{companyCode},
+        </if>
+        <if test="licPath !=null and licPath !=''">
+            LIC_PATH=#{licPath},
+        </if>
+        <if test="rifPath !=null and rifPath !=''">
+            RIF_PATH=#{rifPath},
+        </if>
+        <if test="cerPath !=null and cerPath !=''">
+            CER_PATH=#{cerPath},
+        </if>
+        AUTHENTICATION="2"
+        WHERE
+        USER_ID =#{userId}
+    </update>
+    <update id="setEmployerInfo" parameterType="com.sostar.bean.param.EmployerInfoParam">
+        UPDATE COMPANY
+        SET
+        <if test="logoPath !=null and logoPath !=''">
+            LOGO_PATH=#{logoPath},
+        </if>
+        <if test="companyName !=null and companyName !=''">
+            COMPANY_NAME=#{companyName},
+        </if>
+        <if test="contactPhone !=null and contactPhone !=''">
+            CONTACT_PHONE=#{contactPhone},
+        </if>
+        <if test="introduction !=null and introduction !=''">
+            INTRODUCTION=#{introduction},
+        </if>
+        <if test="address !=null and address !=''">
+            ADDRESS=#{address},
+        </if>
+        <if test="rangeArea !=null and rangeArea !=''">
+            RANGE_AREA=#{rangeArea},
+        </if>
+        <if test="webAddress !=null and webAddress !=''">
+            WEB_ADDRESS=#{webAddress},
+        </if>
+        UPDATE_TIME = NOW()
+        WHERE
+        USER_ID =#{userId}
+    </update>
+</mapper>

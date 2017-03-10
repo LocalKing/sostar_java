@@ -1,0 +1,23 @@
+spring:
+  dataSource:
+      url: jdbc:mysql://114.215.18.160:3306/sostar
+      username: root
+      password: Root!123
+      driver-class-name: com.mysql.jdbc.Driver
+      initial-size: 5
+      max-active: 5
+      max-idle: 5
+      max-wait: 60000
+  captcha:
+      apikey: d3765888f36666e64a94c24462c6012c
+      url: https://sms.yunpian.com/v2/sms/single_send.json
+      text: 【sostar系统】亲爱的%s，您的验证码是%s。有效期为%s秒，请尽快验证
+      time: 120
+server:
+  port: 8080
+  context-path: /sostar/
+#  ssl:
+#    key-password: 123456
+#    key-store: .keystore
+#    key-alias: tomcat
+#    key-store-type: JKS
